@@ -1,5 +1,7 @@
 
 10.12 今天搭建一个react开发框架
+https://reactjs.org/docs/hello-world.html
+
 从webpack开始，重新熟悉webpack
 需要安装的包
 babel-core,react,react-dom
@@ -12,3 +14,45 @@ devtool:'inline-source-map'
 
 webpack还需要进一步学习，resovle，代码分离等。
 npm还需要学习，--save，-dev
+
+1.jsx
+jsx是对js的一种扩张，声明如下：
+const element = <h1>Hello, world!</h1>;
+element既不是字符串也不是dom对象，他是jsx
+2.ReactDOM.render
+const element = <h1>Hello, world</h1>;
+ReactDOM.render(
+  element,
+  document.getElementById('root')
+);
+3.Functional and Class Components
+3.1 Functional
+function Welcome(props) {
+  return <h1>Hello, {props.name}</h1>;
+}
+function App() {
+  return (
+    <div>
+      <Welcome name="Sara" />
+      <Welcome name="Cahal" />
+      <Welcome name="Edite" />
+    </div>
+  );
+}
+ReactDOM.render(
+  <App />,
+  document.getElementById('root')
+);
+3.2 Class components
+不要直接修改state，而是通过set方法
+state的更新是异步的
+// Wrong
+this.setState({
+  counter: this.state.counter + this.props.increment,
+});
+// Correct
+this.setState((prevState, props) => ({
+  counter: prevState.counter + props.increment
+}));
+state的更新是执行merge操作
+the data flows down
