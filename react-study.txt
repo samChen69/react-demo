@@ -1,0 +1,14 @@
+
+10.12 今天搭建一个react开发框架
+从webpack开始，重新熟悉webpack
+需要安装的包
+babel-core,react,react-dom
+需要安装的loader
+style-loader,css-loader,file-loader,babel-loader
+需要安装的插件plugins
+html-webpack-plugin,clean-webpack-plugin,webpack-dev-serve,
+需要配置的参数：
+devtool:'inline-source-map'
+
+webpack还需要进一步学习，resovle，代码分离等。
+npm还需要学习，--save，-dev
