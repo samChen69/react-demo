@@ -1,4 +1,10 @@
 
+10.13
+今天去面试，还是受了些打击的。css3不熟，react还需要学习。
+
+react,css3,
+webpack,npm
+
 10.12 今天搭建一个react开发框架
 https://reactjs.org/docs/hello-world.html
 
@@ -56,3 +62,30 @@ this.setState((prevState, props) => ({
 }));
 state的更新是执行merge操作
 the data flows down
+
+4.事件采用的是驼峰写法
+<button onClick={activateLasers}>
+  Activate Lasers
+</button>
+
+5.条件渲染
+如果不想渲染，就返回null
+
+6.list渲染
+function NumberList(props) {
+  const numbers = props.numbers;
+  const listItems = numbers.map((number) =>
+    <li>{number}</li>
+  );
+  return (
+    <ul>{listItems}</ul>
+  );
+}
+
+const numbers = [1, 2, 3, 4, 5];
+ReactDOM.render(
+  <NumberList numbers={numbers} />,
+  document.getElementById('root')
+);
+
+7.form
