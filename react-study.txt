@@ -1,9 +1,36 @@
 
 10.13
 今天去面试，还是受了些打击的。css3不熟，react还需要学习。
+react常用库
+https://ant.design/components/button-cn/
+https://reactstrap.github.io/components/breadcrumbs/
+http://www.material-ui.com/#/components/auto-complete
 
+react 中文文档
+https://doc.react-china.org/
+http://www.cocoachina.com/webapp/20150721/12692.html
 react,css3,
 webpack,npm
+
+state为状态数据，当state发生改变时，会自动调用render函数，重新渲染。
+在用class时，必须是super(),这样才能正确的获取到this
+
+改变应用数据有两种方式，一种是直接修改，一种是将已有的变量替换为一个新的变量。
+直接修改数据
+var player = {score: 1, name: 'Jeff'};
+player.score = 2;
+// Now player is {score: 2, name: 'Jeff'}
+替换修改数据
+var player = {score: 1, name: 'Jeff'};
+var newPlayer = Object.assign({}, player, {score: 2});
+// Now player is unchanged, but newPlayer is {score: 2, name: 'Jeff'}
+// 或者使用最新的对象分隔符语法，你可以这么写：
+// var newPlayer = {...player, score: 2};
+
+这样做可以很轻松实现 撤销/重做以及时间旅行
+
+状态提升
+当多个组件共用一个状态时，将状态提升至父组件，然后父组件以props传入子组件，然后在传递一个方法给子组件来修改状态。
 
 10.12 今天搭建一个react开发框架
 https://reactjs.org/docs/hello-world.html
@@ -89,3 +116,197 @@ ReactDOM.render(
 );
 
 7.form
+
+8.Lifting state up
+当多个组件共用某些state时，这个时候需要把这个state进行提升。
+props是只读属性
+
+9.组合和继承
+
+10.jsx是React.createElement()的语法糖
+可以使用自己闭合：<div className="sidebar" />
+
+jsx使用.访问属性组件
+const MyComponents = {
+  DatePicker: function DatePicker(props) {
+    return <div>Imagine a {props.color} datepicker here.</div>;
+  }
+}
+function BlueDatePicker() {
+  return <MyComponents.DatePicker color="blue" />;
+}
+
+自定义组件首字母必须大写，否则react会认为是html的原生标签。
+
+运行时选择类型
+const components = {
+  photo: PhotoStory,
+  video: VideoStory
+};
+function Story(props) {
+  // Wrong! JSX type can't be an expression.
+  return <components[props.storyType] story={props.story} />;
+}
+function Story(props) {
+  // Correct! JSX type can be a capitalized variable.
+  const SpecificStory = components[props.storyType];
+  return <SpecificStory story={props.story} />;
+}
+
+jsx里的props可以是表达式
+
+props传递一个字符串
+<MyComponent message="hello world" />
+<MyComponent message={'hello world'} />
+
+props默认传递true
+<MyTextBox autocomplete />
+<MyTextBox autocomplete={true} />//但这种不推荐，他会跟es6中的对象短写产生误会{foo},{foo:foo},不是{foo,true}
+
+props的解构
+function App1() {
+  return <Greeting firstName="Ben" lastName="Hector" />;
+}
+function App2() {
+  const props = {firstName: 'Ben', lastName: 'Hector'};
+  return <Greeting {...props} />;
+}
+
+2.children in JSX
+文本节点
+<MyComponent>Hello world!</MyComponent>
+
+组件嵌套
+<MyContainer>
+  <MyFirstComponent />
+  <MySecondComponent />
+</MyContainer>
+
+react component也可以返回一个数组
+render() {
+  // No need to wrap list items in an extra element!
+  return [
+    // Don't forget the keys :)
+    <li key="A">First item</li>,
+    <li key="B">Second item</li>,
+    <li key="C">Third item</li>,
+  ];
+}
+
+表达式作为children
+<MyComponent>foo</MyComponent>
+<MyComponent>{'foo'}</MyComponent>
+
+functions作为children
+// Calls the children callback numTimes to produce a repeated component
+function Repeat(props) {
+  let items = [];
+  for (let i = 0; i < props.numTimes; i++) {
+    items.push(props.children(i));
+  }
+  return <div>{items}</div>;
+}
+function ListOfTenThings() {
+  return (
+    <Repeat numTimes={10}>
+      {(index) => <div key={index}>This is item {index} in the list</div>}
+    </Repeat>
+  );
+}
+
+Booleans, Null, and Undefined Are Ignored
+//渲染出来都是一样的<div></div>
+<div />
+<div></div>
+<div>{false}</div>
+<div>{null}</div>
+<div>{undefined}</div>
+<div>{true}</div>
+
+0虽然为false，但还是为被渲染出来
+
+3.prop的类型校验propTypes
+import PropTypes from 'prop-types';
+MyComponent.propTypes = {
+  // You can declare that a prop is a specific JS primitive. By default, these
+  // are all optional.
+  optionalArray: PropTypes.array,
+  optionalBool: PropTypes.bool,
+  optionalFunc: PropTypes.func,
+  optionalNumber: PropTypes.number,
+  optionalObject: PropTypes.object,
+  optionalString: PropTypes.string,
+  optionalSymbol: PropTypes.symbol,
+
+  // Anything that can be rendered: numbers, strings, elements or an array
+  // (or fragment) containing these types.
+  optionalNode: PropTypes.node,
+
+  // A React element.
+  optionalElement: PropTypes.element,
+
+  // You can also declare that a prop is an instance of a class. This uses
+  // JS's instanceof operator.
+  optionalMessage: PropTypes.instanceOf(Message),
+
+  // You can ensure that your prop is limited to specific values by treating
+  // it as an enum.
+  optionalEnum: PropTypes.oneOf(['News', 'Photos']),
+
+  // An object that could be one of many types
+  optionalUnion: PropTypes.oneOfType([
+    PropTypes.string,
+    PropTypes.number,
+    PropTypes.instanceOf(Message)
+  ]),
+
+  // An array of a certain type
+  optionalArrayOf: PropTypes.arrayOf(PropTypes.number),
+
+  // An object with property values of a certain type
+  optionalObjectOf: PropTypes.objectOf(PropTypes.number),
+
+  // An object taking on a particular shape
+  optionalObjectWithShape: PropTypes.shape({
+    color: PropTypes.string,
+    fontSize: PropTypes.number
+  }),
+
+  // You can chain any of the above with `isRequired` to make sure a warning
+  // is shown if the prop isn't provided.
+  requiredFunc: PropTypes.func.isRequired,
+
+  // A value of any data type
+  requiredAny: PropTypes.any.isRequired,
+
+  // You can also specify a custom validator. It should return an Error
+  // object if the validation fails. Don't `console.warn` or throw, as this
+  // won't work inside `oneOfType`.
+  customProp: function(props, propName, componentName) {
+    if (!/matchme/.test(props[propName])) {
+      return new Error(
+        'Invalid prop `' + propName + '` supplied to' +
+        ' `' + componentName + '`. Validation failed.'
+      );
+    }
+  },
+
+  // You can also supply a custom validator to `arrayOf` and `objectOf`.
+  // It should return an Error object if the validation fails. The validator
+  // will be called for each key in the array or object. The first two
+  // arguments of the validator are the array or object itself, and the
+  // current item's key.
+  customArrayProp: PropTypes.arrayOf(function(propValue, key, componentName, location, propFullName) {
+    if (!/matchme/.test(propValue[key])) {
+      return new Error(
+        'Invalid prop `' + propFullName + '` supplied to' +
+        ' `' + componentName + '`. Validation failed.'
+      );
+    }
+  })
+};
+
+4.Refs and the DOM ???
+
+5.不可控组件
+大多数时候使用可控组件，不可控组件的数据是有DOM处理的。
